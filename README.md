@@ -1,4 +1,5 @@
 # Auto Summarizer
+**GitHub Repository:** https://github.com/KazKozDev/summarization-pipeline
 
 An adaptive text summarization service that combines extractive and abstractive approaches for optimal results. The system automatically selects the best model based on input text and available system resources.
 
