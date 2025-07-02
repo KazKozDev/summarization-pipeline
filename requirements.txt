@@ -1,0 +1,26 @@
+# Core NLP
+nltk==3.8.1
+spacy==3.7.2
+scikit-learn==1.3.0
+networkx==3.1
+numpy==1.24.3
+pandas==2.0.3
+
+# Web Interface
+streamlit==1.24.0
+gradio==3.34.0
+
+# Testing and Development
+pytest==7.3.1
+pylint==2.17.4
+black==23.3.0
+mypy==1.3.0
+
+# Utilities
+tqdm==4.65.0
+python-dotenv==1.0.0
+psutil==5.9.5
+loguru==0.7.0
+
+# NLTK will be downloaded during first run
+nltk==3.8.1

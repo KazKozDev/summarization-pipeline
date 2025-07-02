@@ -1,0 +1,39 @@
+# Model registry for Auto Summarizer
+
+bart-large:
+  class_path: auto_summarizer.models.transformers.BARTSummarizer
+  model_name: facebook/bart-large-cnn
+  description: High-quality abstractive summarization model with 1024 token context.
+  default_device: auto
+  max_length: 150
+  min_length: 30
+
+bart-distil:
+  class_path: auto_summarizer.models.transformers.BARTSummarizer
+  model_name: sshleifer/distilbart-cnn-12-6
+  description: Lightweight distilled version of BART for CPU inference and unit testing.
+  default_device: cpu
+  max_length: 140
+  min_length: 25
+
+t5-base:
+  class_path: auto_summarizer.models.transformers.t5_summarizer.T5Summarizer
+  model_name: t5-base
+  description: Versatile text-to-text model, good for domain fine-tuning.
+  default_device: auto
+  max_length: 120
+  min_length: 20
+
+pegasus-xsum:
+  class_path: auto_summarizer.models.transformers.pegasus_summarizer.PegasusSummarizer
+  model_name: google/pegasus-xsum
+  description: Model specialised for very short, abstractive highlights.
+  default_device: auto
+  max_length: 60
+  min_length: 10
+
+hybrid-default:
+  class_path: auto_summarizer.models.hybrid_summarizer.HybridSummarizer
+  description: Hybrid summarization pipeline (extractive + abstractive BART)
+  default_device: auto
+  k: 3
