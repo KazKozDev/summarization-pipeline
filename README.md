@@ -326,10 +326,6 @@ This project could be extended with:
 - **LinkedIn**: [Artem Kazakov Kozlov](https://www.linkedin.com/in/kazkozdev/)
 - **GitHub**: [@KazKozDev](https://github.com/KazKozDev)
 
-**Project Resources:**
-- **Issues**: [Report bugs or request features](https://github.com/KazKozDev/auto-summarizer/issues)
-- **Wiki**: Coming soon with more detailed explanations
-
 **⭐If this project helped you learn something new, please give it a star!**
 
 ---
