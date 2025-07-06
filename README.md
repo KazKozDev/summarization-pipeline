@@ -2,9 +2,13 @@
 
 **Educational text summarization project demonstrating multiple NLP approaches and modern Python development practices**
 
-[![CI](https://github.com/KazKozDev/auto-summarizer/actions/workflows/ci.yml/badge.svg)](https://github.com/KazKozDev/auto-summarizer/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+[![Docker](https://img.shields.io/badge/docker-ready-blue?logo=docker)](https://hub.docker.com/)
+[![Streamlit](https://img.shields.io/badge/streamlit-app-FF4B4B?logo=streamlit)](https://streamlit.io/)
+[![FastAPI](https://img.shields.io/badge/fastapi-framework-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
 
 Auto Summarizer is an educational project that demonstrates different approaches to automatic text summarization. It implements three main summarization methods: extractive (TextRank algorithm), feature-based scoring, and abstractive (using BART transformer), along with a combined approach that merges multiple techniques. The project showcases modern Python development practices including clean architecture, comprehensive testing, Docker containerization, and CI/CD pipelines with multiple interfaces (web UI, Python API, REST endpoints) for easy experimentation.
 
