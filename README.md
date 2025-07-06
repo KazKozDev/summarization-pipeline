@@ -1,97 +1,339 @@
 # Auto Summarizer
 
-A production-ready text summarization pipeline combining extractive and abstractive approaches.
+**Educational text summarization project demonstrating multiple NLP approaches and modern Python development practices**
 
-## Clone & Setup
+[![CI](https://github.com/KazKozDev/auto-summarizer/actions/workflows/ci.yml/badge.svg)](https://github.com/KazKozDev/auto-summarizer/actions)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-```bash
-git clone https://github.com/KazKozDev/summarization-pipeline.git
-cd summarization-pipeline
-pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-```
+Auto Summarizer is an educational project that demonstrates different approaches to automatic text summarization. It implements three main summarization methods: extractive (TextRank algorithm), feature-based scoring, and abstractive (using BART transformer), along with a combined approach that merges multiple techniques. The project showcases modern Python development practices including clean architecture, comprehensive testing, Docker containerization, and CI/CD pipelines with multiple interfaces (web UI, Python API, REST endpoints) for easy experimentation.
+
+This project serves as a comprehensive learning resource for computer science students studying NLP and machine learning, Python developers looking for well-structured project examples, and ML engineers wanting to understand different summarization approaches. It was created to demonstrate how different NLP algorithms work in practice, modern Python application architecture, and real-world software development workflow, providing a solid foundation that others can learn from, extend, or use as inspiration for their own projects.
 
 ## Tech Stack
 
-**Backend & Core:**
-- Python 3.9+, FastAPI, Pydantic, Uvicorn
+### **Core Technologies**
+- **Python 3.9+** - Main programming language
+- **NLTK & spaCy** - Natural language processing
+- **scikit-learn** - Feature extraction and machine learning utilities
+- **NetworkX** - Graph algorithms for TextRank implementation
 
-**ML/NLP:**
-- PyTorch, Transformers (Hugging Face), spaCy, NLTK
-- scikit-learn, NetworkX, NumPy, Pandas
+### **Machine Learning**
+- **Transformers (Hugging Face)** - BART model for abstractive summarization
+- **PyTorch** - Deep learning framework (via transformers)
+- **NumPy & Pandas** - Data manipulation and numerical computing
 
-**Web & UI:**
-- Streamlit, Gradio
+### **Web & API**
+- **Streamlit** - Interactive web interface
+- **FastAPI** - REST API framework (basic implementation)
+- **Uvicorn** - ASGI server
 
-**DevOps:**
-- Docker, GitHub Actions, Prometheus/Grafana
+### **Development & DevOps**
+- **pytest** - Testing framework
+- **Docker** - Containerization
+- **GitHub Actions** - CI/CD pipeline
+- **black, flake8, mypy** - Code quality tools
 
-**Testing & Quality:**
-- pytest, black, flake8, mypy
+## Installation & Getting Started
 
-## Architecture
+### Prerequisites
 
-**Core Components:**
-- **Extractive**: TextRank algorithm with TF-IDF, position, and length features
-- **Abstractive**: BART transformer models via Hugging Face
-- **Hybrid**: Extractive preprocessing + BART summarization
-- **Adaptive**: Automatic model selection based on text length and system resources
+- Python 3.9 or higher
+- 4GB+ RAM (for BART model)
+- Internet connection (for downloading models)
 
-## Quick Start
+### Quick Start
 
 ```bash
+# Clone the repository
+git clone https://github.com/KazKozDev/auto-summarizer.git
+cd auto-summarizer
+
+# Create virtual environment
+python -m venv myenv
+source myenv/bin/activate  # On Windows: myenv\Scripts\activate
+
 # Install dependencies
 pip install -r requirements.txt
 
-# Download NLP models
+# Download required NLP models
 python -m spacy download en_core_web_sm
 
-# Run web interface
+# Run the web interface
 streamlit run streamlit_app.py
-
-# Or run API server
-uvicorn auto_summarizer.api.app:app --reload
 ```
 
-## Usage
+### Docker Installation
+
+```bash
+# Build and run with Docker
+docker build -t auto-summarizer .
+docker run -p 8000:8000 auto-summarizer
+
+# Or use docker-compose
+docker-compose up --build
+```
+
+### Basic Usage
 
 **Python API:**
 ```python
 from auto_summarizer.core.summarizer import Summarizer
 
+# Initialize summarizer
 summarizer = Summarizer()
-result = summarizer.summarize(text, method="combined", top_n=3)
-print("\n".join(result['summary']))
+
+# Generate summary
+result = summarizer.summarize(
+    text="Your long text here...",
+    method="combined",  # Options: 'textrank', 'features', 'combined'
+    top_n=3
+)
+
+# Access results
+print("Summary:", result['summary'])
+print("Method used:", result['method'])
+print("Sentence scores:", result['scores'])
 ```
 
-**REST API:**
-```bash
-curl -X POST "http://localhost:8000/summarize" \
-  -H "Content-Type: application/json" \
-  -d '{"text": "Your text here", "max_length": 150}'
-```
+**Web Interface:**
+1. Run `streamlit run app.py`
+2. Open http://localhost:8501 in your browser
+3. Paste your text and experiment with different settings
 
-**Docker:**
-```bash
-docker-compose up --build
-```
+## Architecture & Implementation
 
-## Features
-
-- Multiple summarization algorithms (TextRank, feature-based, BART)
-- Automatic model selection based on system resources
-- Batch processing with parallel execution
-- ROUGE/BLEU evaluation metrics
-- Production deployment with monitoring
-- Comprehensive test suite (unit + integration)
-
-## Project Structure
+### Project Structure
 
 ```
 auto_summarizer/
-├── core/           # Main logic (preprocessor, feature extraction, summarizer)
-├── models/         # Model implementations (TextRank, BART, hybrid)
-├── api/           # FastAPI REST endpoints
-tests/             # Unit and integration tests
-scripts/           # Evaluation and data generation utilities
+├── core/
+│   ├── preprocessor.py      # Text cleaning and tokenization
+│   ├── feature_extractor.py # TF-IDF, position, length features  
+│   └── summarizer.py        # Main orchestration logic
+├── models/
+│   ├── textrank.py          # TextRank algorithm implementation
+│   ├── transformers/        # BART and transformer models
+│   └── selector.py          # Model selection logic
+└── api/
+    └── app.py              # FastAPI endpoints (basic)
+
+tests/
+├── unit/                   # Unit tests
+└── integration/           # Integration tests
+
+scripts/
+├── generate_sample_data.py # Test data generation
+└── evaluate_hybrid.py     # Evaluation utilities
 ```
+
+### Core Components
+
+**1. Text Preprocessing (`preprocessor.py`)**
+- Text cleaning and normalization
+- Sentence tokenization using NLTK
+- Named entity recognition with spaCy
+- Stopword removal and lemmatization
+
+**2. Feature Extraction (`feature_extractor.py`)**
+- TF-IDF scoring for term importance
+- Position-based scoring (beginning/end preference)
+- Length normalization
+- Title similarity calculation
+
+**3. Summarization Methods**
+- **TextRank**: Graph-based sentence ranking using PageRank algorithm
+- **Feature-based**: Weighted combination of multiple features
+- **BART Transformer**: Abstractive summarization using pre-trained models
+- **Combined**: Hybrid approach merging extractive and abstractive methods
+
+### Key Learning Points
+
+**Algorithm Implementation:**
+- PageRank adaptation for sentence ranking
+- Feature engineering for extractive summarization
+- Integration of transformer models
+- Evaluation metrics (ROUGE, BLEU)
+
+**Software Engineering:**
+- Clean architecture with separation of concerns
+- Dependency injection and modular design
+- Error handling and fallback mechanisms
+- Configuration management
+
+## Testing & Quality
+
+### Running Tests
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=auto_summarizer --cov-report=html
+
+# Run specific test categories
+pytest tests/unit/          # Unit tests
+pytest tests/integration/   # Integration tests
+```
+
+### Code Quality
+
+```bash
+# Format code
+black auto_summarizer tests
+
+# Check linting
+flake8 auto_summarizer
+
+# Type checking
+mypy auto_summarizer
+```
+
+### What's Tested
+
+- Text preprocessing functionality
+- Feature extraction algorithms
+- TextRank implementation
+- BART model integration
+- End-to-end summarization pipeline
+- API endpoints (basic)
+
+*Note: This is an educational project - test coverage is good but not exhaustive for production use.*
+
+## Example Results
+
+### Sample Input
+```
+Natural language processing (NLP) is a subfield of linguistics, computer science, 
+and artificial intelligence concerned with the interactions between computers and 
+human language. It is used to apply machine learning algorithms to text and speech. 
+The ultimate objective of NLP is to read, decipher, understand, and make sense of 
+the human language in a manner that is valuable.
+```
+
+### TextRank Output
+```
+• Natural language processing (NLP) is a subfield of linguistics, computer science, and artificial intelligence.
+• The ultimate objective of NLP is to read, decipher, understand, and make sense of the human language.
+```
+
+### BART Output
+```
+Natural language processing is a subfield of computer science and artificial intelligence. 
+It applies machine learning algorithms to text and speech to understand human language.
+```
+
+## Configuration
+
+### Model Selection
+
+Models are configured in `auto_summarizer/models/models.yml`:
+
+```yaml
+bart-large:
+  class_path: auto_summarizer.models.transformers.BARTSummarizer
+  model_name: facebook/bart-large-cnn
+  description: High-quality abstractive summarization
+
+bart-distil:
+  class_path: auto_summarizer.models.transformers.BARTSummarizer
+  model_name: sshleifer/distilbart-cnn-12-6
+  description: Lightweight version for faster inference
+```
+
+### Customization
+
+```python
+# Adjust TextRank parameters
+summarizer.textrank.similarity_threshold = 0.3
+summarizer.textrank.damping_factor = 0.85
+
+# Modify feature weights
+weights = {
+    'tfidf': 0.4,
+    'position': 0.2,
+    'length': 0.1,
+    'title_similarity': 0.2,
+    'keyword': 0.1
+}
+```
+
+## Contributing
+
+This is an educational project - contributions that improve the learning experience are welcome!
+
+### Development Setup
+
+```bash
+# Fork and clone
+git clone https://github.com/YOUR_USERNAME/auto-summarizer.git
+cd auto-summarizer
+
+# Install development dependencies
+pip install -r requirements.txt -r requirements-test.txt
+
+# Run tests to ensure everything works
+pytest tests/
+```
+
+### What We'd Welcome
+
+- Additional summarization algorithms
+- Better documentation and examples
+- Performance improvements
+- Bug fixes and code quality improvements
+- Additional evaluation metrics
+- More comprehensive tests
+
+### Guidelines
+
+- Follow existing code style (black, flake8, mypy)
+- Add tests for new functionality
+- Update documentation
+- Keep the educational focus
+
+## Potential Improvements
+
+This project could be extended with:
+
+**Algorithm Enhancements:**
+- T5 and Pegasus transformer models
+- Hierarchical summarization for long documents
+- Domain-specific fine-tuning
+- Multi-document summarization
+
+**Engineering Improvements:**
+- Comprehensive performance benchmarks
+- Production-ready API with authentication
+- Caching and performance optimization
+- More sophisticated model selection
+- Web interface improvements
+
+**Evaluation & Metrics:**
+- Human evaluation framework
+- More evaluation datasets
+- Comparative analysis tools
+- Quality metrics dashboard
+
+---
+
+## Contact
+
+**Questions about the code or want to discuss NLP?**
+
+**Connect with me:**
+- **LinkedIn**: [Artem Kazakov Kozlov](https://www.linkedin.com/in/kazkozdev/)
+- **GitHub**: [@KazKozDev](https://github.com/KazKozDev)
+
+**Project Resources:**
+- **Issues**: [Report bugs or request features](https://github.com/KazKozDev/auto-summarizer/issues)
+- **Wiki**: Coming soon with more detailed explanations
+
+**⭐If this project helped you learn something new, please give it a star!**
+
+---
+
+**License:** [MIT License](LICENSE) - Feel free to use this code for learning and experimentation
+
+*This is an educational project created for learning purposes. While functional, it's not intended for production use without additional development and testing.*
